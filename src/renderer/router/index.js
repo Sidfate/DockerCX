@@ -18,7 +18,34 @@ export default new Router({
         component: () => import('@/views/dashboard/index')
       }]
     },
-
+    {
+      path: '/',
+      component: Layout,
+      redirect: '/containers',
+      name: 'Container',
+      hidden: true,
+      children: [{
+        path: 'containers',
+        component: () => import('@/views/container/index')
+      }]
+    },
+    {
+      path: '/',
+      component: Layout,
+      redirect: '/images',
+      name: 'Image',
+      hidden: true,
+      children: [
+        {
+          path: 'images',
+          component: () => import('@/views/image/index')
+        },
+        {
+          path: 'image/new',
+          component: () => import('@/views/image/new')
+        }
+      ]
+    },
     { path: '*', redirect: '/dashboard', hidden: true }
   ]
 })

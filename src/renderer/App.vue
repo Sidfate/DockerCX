@@ -12,4 +12,7 @@
 
 <style>
   /* CSS */
+  .table-actions {
+    margin: 15px 10px;
+  }
 </style>

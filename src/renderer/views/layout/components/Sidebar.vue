@@ -5,20 +5,28 @@
           app
   >
     <v-list dense>
-      <v-list-tile @click="">
+      <v-list-tile @click="goPage('/dashboard')">
         <v-list-tile-action>
-          <v-icon>home</v-icon>
+          <v-icon>dashboard</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
-          <v-list-tile-title>Home</v-list-tile-title>
+          <v-list-tile-title>Dashboard</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
-      <v-list-tile @click="">
+      <v-list-tile @click="goPage('/containers')">
         <v-list-tile-action>
-          <v-icon>contact_mail</v-icon>
+          <v-icon>dns</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
-          <v-list-tile-title>Contact</v-list-tile-title>
+          <v-list-tile-title>Containers</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile>
+      <v-list-tile @click="goPage('/images')">
+        <v-list-tile-action>
+          <v-icon>library_books</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title>Images</v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
     </v-list>
@@ -52,6 +60,11 @@
     },
     mounted () {
       this.drawerStatus = this.$store.getters.drawer
+    },
+    methods: {
+      goPage (url) {
+        this.$router.push(url)
+      }
     }
   }
 </script>

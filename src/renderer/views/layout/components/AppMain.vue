@@ -3,7 +3,7 @@
     <v-container fluid fill-height>
       <v-layout
               justify-center
-              align-center
+              align-start
       >
         <router-view :key="key"></router-view>
       </v-layout>
