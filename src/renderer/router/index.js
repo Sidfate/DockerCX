@@ -9,39 +9,41 @@ export default new Router({
   routes: [
     {
       path: '/',
-      component: Layout,
       redirect: '/dashboard',
+      hidden: true
+    },
+    {
+      path: '/dashboard',
+      component: Layout,
       name: 'Dashboard',
-      hidden: true,
+      meta: {title: 'Dashboard', icon: 'dashboard'},
       children: [{
-        path: 'dashboard',
+        path: '',
         component: () => import('@/views/dashboard/index')
       }]
     },
     {
-      path: '/',
+      path: '/containers',
       component: Layout,
-      redirect: '/containers',
       name: 'Container',
-      hidden: true,
+      meta: {title: 'Container', icon: 'database'},
       children: [{
-        path: 'containers',
+        path: '',
         component: () => import('@/views/container/index')
       }]
     },
     {
-      path: '/',
+      path: '/images',
       component: Layout,
-      redirect: '/images',
       name: 'Image',
-      hidden: true,
+      meta: {title: 'Image', icon: 'switcher'},
       children: [
         {
-          path: 'images',
+          path: '',
           component: () => import('@/views/image/index')
         },
         {
-          path: 'image/new',
+          path: 'new',
           component: () => import('@/views/image/new')
         }
       ]

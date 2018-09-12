@@ -1,16 +1,19 @@
 const state = {
-  drawer: null
+  sidebar: {
+    opened: true,
+    withoutAnimation: false
+  }
 }
 
 const mutations = {
-  TOGGLE_DRAWER (state) {
-    state.drawer = !state.drawer
+  TOGGLE_SIDEBAR (state) {
+    state.sidebar.opened = !state.sidebar.opened
   }
 }
 
 const actions = {
-  toggleDrawer ({ commit }) {
-    commit('TOGGLE_DRAWER')
+  toggleSidebar ({ commit }) {
+    commit('TOGGLE_SIDEBAR')
   }
 }
 

@@ -1,4 +1,4 @@
 const getters = {
-  drawer: state => state.App.drawer
+  sidebar: state => state.App.sidebar
 }
 export default getters
