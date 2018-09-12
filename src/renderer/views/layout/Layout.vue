@@ -1,12 +1,11 @@
 <template>
-  <v-app id="inspire">
+  <a-layout style="height: 100%;">
     <sidebar></sidebar>
-    <navbar></navbar>
-    <app-main></app-main>
-    <v-footer color="indigo" app>
-      <span class="white--text">&copy; 2017</span>
-    </v-footer>
-  </v-app>
+    <a-layout>
+      <navbar></navbar>
+      <app-main></app-main>
+    </a-layout>
+  </a-layout>
 </template>
 
 <script>

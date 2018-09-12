@@ -1,36 +1,22 @@
 <template>
-  <v-navigation-drawer
-          v-model="drawerStatus"
-          fixed
-          app
+  <a-layout-sider
+    :trigger="null"
+    collapsible
+    v-model="isCollapse"
   >
-    <v-list dense>
-      <v-list-tile @click="goPage('/dashboard')">
-        <v-list-tile-action>
-          <v-icon>dashboard</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-content>
-          <v-list-tile-title>Dashboard</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
-      <v-list-tile @click="goPage('/containers')">
-        <v-list-tile-action>
-          <v-icon>dns</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-content>
-          <v-list-tile-title>Containers</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
-      <v-list-tile @click="goPage('/images')">
-        <v-list-tile-action>
-          <v-icon>library_books</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-content>
-          <v-list-tile-title>Images</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
-    </v-list>
-  </v-navigation-drawer>
+    <div class="logo"></div>
+    <a-menu theme="dark" mode="inline" :defaultSelectedKeys="[$route.path]">
+      <template v-for="(item, key) in routes" v-if="!item.hidden">
+          <a-menu-item :key="item.path">
+            <router-link :to="item.path"
+                         :key="item.name">
+              <a-icon :type="item.meta.icon" />
+              <span class="nav-text">{{ item.meta.title }}</span>
+            </router-link>
+          </a-menu-item>
+      </template>
+    </a-menu>
+  </a-layout-sider>
 </template>
 
 <script>
@@ -40,35 +26,23 @@
     name: 'SideBar',
     computed: {
       ...mapGetters([
-        'drawer'
-      ])
-    },
-    watch: {
-      drawerStatus (val) {
-        if (!val) {
-          this.$store.dispatch('toggleDrawer')
-        }
+        'sidebar'
+      ]),
+      isCollapse () {
+        return !this.sidebar.opened
       },
-      drawer (val) {
-        this.drawerStatus = val
-      }
-    },
-    data () {
-      return {
-        drawerStatus: null
-      }
-    },
-    mounted () {
-      this.drawerStatus = this.$store.getters.drawer
-    },
-    methods: {
-      goPage (url) {
-        this.$router.push(url)
+      routes () {
+        console.log(this.$route.path)
+        return this.$router.options.routes
       }
     }
   }
 </script>
 
 <style scoped>
-
+  .logo {
+    height: 32px;
+    background: rgba(255,255,255,.2);
+    margin: 16px;
+  }
 </style>

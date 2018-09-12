@@ -1,14 +1,7 @@
 <template>
-  <v-content>
-    <v-container fluid fill-height>
-      <v-layout
-              justify-center
-              align-start
-      >
-        <router-view :key="key"></router-view>
-      </v-layout>
-    </v-container>
-  </v-content>
+  <a-layout-content :style="{ margin: '24px 16px', 'overflow-y': 'auto' }">
+    <router-view :key="key"></router-view>
+  </a-layout-content>
 </template>
 
 <script>

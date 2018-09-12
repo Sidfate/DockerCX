@@ -4,13 +4,12 @@ import App from './App'
 import router from './router'
 import store from './store'
 
-import Vuetify from 'vuetify'
-import 'vuetify/dist/vuetify.min.css'
+import Antd from 'ant-design-vue'
+import 'ant-design-vue/dist/antd.css'
 import Docker from 'dockerode'
 
-Vue.use(Vuetify)
+Vue.use(Antd)
 
-console.log(new Docker())
 Vue.prototype.$docker = new Docker()
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
