@@ -1,131 +1,70 @@
 <template>
-  <v-card
-          color="grey lighten-4"
-          flat
-          width="100%"
-  >
-    <v-toolbar>
-      <v-icon>library_books</v-icon>
-      <v-toolbar-title>Images</v-toolbar-title>
+  <div>
+    <a-card title="Images">
+      <a-button type="primary" slot="extra"><router-link :to="{path: '/images/new'}">Build an image</router-link></a-button>
 
-      <v-spacer></v-spacer>
-
-      <v-btn icon>
-        <v-icon>search</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>more_vert</v-icon>
-      </v-btn>
-    </v-toolbar>
-
-    <div class="table-actions">
-      <v-btn :disabled="!batchStatus" color="error">
-        <span>Remove</span>
-        <v-icon>delete</v-icon>
-      </v-btn>
-
-      <router-link to="/image/new">
-      <v-btn color="info">
-        <span>Build a new image</span>
-        <v-icon>add</v-icon>
-      </v-btn>
-      </router-link>
-    </div>
-
-    <v-data-table
-            v-model="selected"
-            :headers="headers"
-            :items="desserts"
-            :pagination.sync="pagination"
-            select-all
-            item-key="id"
-            class="elevation-1"
-    >
-      <template slot="headers" slot-scope="props">
-        <tr>
-          <th>
-            <v-checkbox
-                    :input-value="props.all"
-                    :indeterminate="props.indeterminate"
-                    primary
-                    hide-details
-                    @click.native="toggleAll"
-            ></v-checkbox>
-          </th>
-          <th
-                  v-for="header in props.headers"
-                  :key="header.text"
-                  :class="['column sortable', pagination.descending ? 'desc' : 'asc', header.value === pagination.sortBy ? 'active' : '']"
-                  @click="changeSort(header.value)"
-          >
-            <v-icon small>arrow_upward</v-icon>
-            {{ header.text }}
-          </th>
-        </tr>
-      </template>
-      <template slot="items" slot-scope="props">
-        <tr :active="props.selected" @click="props.selected = !props.selected">
-          <td>
-            <v-checkbox
-                    :input-value="props.selected"
-                    primary
-                    hide-details
-            ></v-checkbox>
-          </td>
-          <td>{{ props.item.Id | getIdString }}</td>
-          <td class="text-xs-left"><v-chip>{{ props.item.RepoTags[0] }}</v-chip></td>
-          <td class="text-xs-left">{{ props.item.Size }}</td>
-          <td class="text-xs-left">{{ props.item.Created }}</td>
-        </tr>
-      </template>
-    </v-data-table>
-  </v-card>
+      <a-list
+              :grid="{ gutter: 16, xs: 1, sm: 1, md: 2, lg: 2, xl: 3, xxl: 3 }"
+              :dataSource="data"
+      >
+        <a-list-item slot="renderItem" slot-scope="item, index">
+          <template>
+            <a-card
+                    hoverable
+                    style="width: 300px"
+            >
+              <ul class="ant-card-actions" slot="actions">
+                <li style="width: 33.3333%;"><a-icon type="setting" /></li>
+                <li style="width: 33.3333%;"><a-icon type="edit" /></li>
+                <li style="width: 33.3333%;"> <a-icon type="ellipsis" /></li>
+              </ul>
+              <a-card-meta
+                      :title="item.tag.repository"
+                      description="This is the description">
+                <a-avatar slot="avatar" src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+              </a-card-meta>
+              <div>
+                <a-icon type="tag" /> {{ item.tag.tag }}
+              </div>
+            </a-card>
+          </template>
+        </a-list-item>
+      </a-list>
+    </a-card>
+  </div>
 </template>
 
 <script>
-  import { formatString } from '@/utils'
+  import dataTable from '@/components/DataTable'
+  import { getImageAbbrId, getTagInfo } from '@/utils'
 
   export default {
     name: 'images-index',
-    filters: {
-      getIdString (id) {
-        id = id.split(':')[1]
-        return formatString(id, 8)
+    components: { dataTable },
+    data () {
+      return {
+        data: []
       }
     },
-    data: () => ({
-      batchStatus: false,
-      pagination: {
-        sortBy: 'Id'
-      },
-      selected: [],
-      headers: [
-        { text: 'Id', value: 'Id' },
-        { text: 'Tags', value: 'Tags' },
-        { text: 'Size', value: 'Size' },
-        { text: 'Created', value: 'Created' }
-      ],
-      desserts: []
-    }),
     async created () {
-      await this.listImages()
+      await this.fetchData()
     },
     methods: {
-      toggleAll () {
-        if (this.selected.length) this.selected = []
-        else this.selected = this.desserts.slice()
-      },
-      changeSort (column) {
-        if (this.pagination.sortBy === column) {
-          this.pagination.descending = !this.pagination.descending
-        } else {
-          this.pagination.sortBy = column
-          this.pagination.descending = false
-        }
-      },
-      async listImages () {
-        this.desserts = await this.$docker.listImages()
+      async fetchData () {
+        this.data = []
+        const images = await this.$docker.listImages()
+
+        console.log(images)
+        images.forEach(e => {
+          const tagInfo = getTagInfo(e.RepoTags[0])
+
+          this.data.push({
+            Id: getImageAbbrId(e.Id),
+            tag: tagInfo,
+            Created: e.Created,
+            Size: e.Size
+          })
+        })
       }
     }
   }
